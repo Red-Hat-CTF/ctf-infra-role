@@ -3,57 +3,56 @@
 # tasks/main.yml
 
 - name: Create group
-  group:
+  ansible.builtin.group:
     name: "{{ group_name }}"
     state: present
 
-- name: Create ansible-ctf-service-account
-  user:
-    name: "{{ ansible-ctf-service-account }}"
+- name: Create service accounts
+  ansible.builtin.user:
+    name: "{{ item.name }}"
     groups: "{{ group_name }}"
     append: yes
     createhome: yes
     shell: /bin/bash
-#    password: "{{ ansible-ctf-service-account-password }}"
+  with_items: "{{ service_accounts }}"
 
 
-- name: Create logging-service-account 
-  user:
-    name: "{{ logging-service-account }}"
-    groups: "{{ group_name }}"
-    append: yes
-    createhome: yes
-    shell: /bin/bash
-#    password: "{{ logging-service-account-password }}"
+- name: Create .ssh directories
+  ansible.builtin.file: 
+     path: "~{{ item.name }}/.ssh"
+     state: directory
+     mode: 0700
+  with_items: "{{ service_accounts }}"
 
-#- name: Add public ssh key to ansible-ctf-service-account
-#  authorized_key:
-#    user: "{{ ansible-ctf-service-account }}"
-#    state: present
-#    key: "{{ lookup('file', 'files/ctf-service.pub') }}"
+- name: Create .ssh/authorized_keys
+  ansible.builtin.file: 
+     path: "~{{ item.name }}/.ssh/authorized_keys"
+     state: touch
+     mode: 0700
+  with_items: "{{ service_accounts }}"
 
-#- name: Add public ssh key to logging-service-account
-#  authorized_key:
-#    user: "{{ logging-service-account }}"
-#    state: present
-#    key: "{{ lookup('file', 'files/ctf-service.pub') }}"
+#- name: Create authorized_keys files
+#  ansible.builtin.copy:
+#    content: "{{ ssh_key }}"
+#    dest: "~{{ item.name }}/.ssh/authorized_keys"
+#    mode: 0600
+#  with_items: "{{ service_accounts }}"
 
 #- name: Add public SSH key to service accounts
 #  authorized_key:
 #    user: "{{ item.key }}"
 #    state: present
-#    key: "{{ lookup('file', 'files/ctf-service.pub') }}"
-#  with_items:
-#    - { key: 'ansible-ctf-service-account' }
-#    - { key: 'logging-service-account' }
+#    key: "{{ lookup('ctf-service.pub', 'ctf-service.pub') }}"
+#  with_items: "{{ service_accounts }}"
 
-- name: Add authorized key for ansible user
-  ansible.builtin.copy:
-    content: "{{ ctf-service.pub }}"
-    dest: "/home/"{{ logging-service-account }}"/.ssh/authorized_keys"
-    owner: "{{ logging-service-account }}"
-    group: "{{ group_name }}"
-    mode: '0600'
+#- name: Add authorized key for ansible user
+#  ansible.builtin.copy:
+#    content: "{{ ctf-service.pub }}"
+#    dest: "/home/ansible-ctf-service-account/.ssh/authorized_keys"
+#    owner: "{{ logging-service-account }}"
+#    group: "{{ group_name }}"
+#    mode: '0600'
+
 
 - name: Restart SSH service to apply changes
   ansible.builtin.service:
