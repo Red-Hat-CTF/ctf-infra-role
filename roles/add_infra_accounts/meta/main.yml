@@ -1,6 +1,6 @@
 galaxy_info:
   author: Joshua Loscar
-  description: your role description
+  description: Setup CTF Env 
   company: Red Hat
   license: CC-BY-4.0
   min_ansible_version: 2.1
