@@ -9,7 +9,7 @@
 
 - name: Create ansible-ctf-service-account
   user:
-    name: "ansible-ctf-service-account"
+    name: "{{ ansible-ctf-service-account }}"
     groups: "{{ group_name }}"
     append: yes
     createhome: yes
@@ -19,7 +19,7 @@
 
 - name: Create logging-service-account 
   user:
-    name: "logging-service-account"
+    name: "{{ logging-service-account }}"
     groups: "{{ group_name }}"
     append: yes
     createhome: yes
@@ -47,3 +47,15 @@
 #    - { key: 'ansible-ctf-service-account' }
 #    - { key: 'logging-service-account' }
 
+- name: Add authorized key for ansible user
+  ansible.builtin.copy:
+    content: "{{ ctf-service.pub }}"
+    dest: "/home/"{{ logging-service-account }}"/.ssh/authorized_keys"
+    owner: "{{ logging-service-account }}"
+    group: "{{ group_name }}"
+    mode: '0600'
+
+- name: Restart SSH service to apply changes
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
