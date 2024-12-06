@@ -1,0 +1,9 @@
+- name: Config CTF env
+  hosts: rsyslog_servers
+  gather_facts: yes
+  become: true
+
+  tasks:
+    - name: add infra accounts with public sshkeys
+      import_role:
+        name: add_infra_accounts

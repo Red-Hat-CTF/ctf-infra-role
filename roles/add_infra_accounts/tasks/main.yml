@@ -1,0 +1,49 @@
+---
+# tasks file for add_infra_accounts
+# tasks/main.yml
+
+- name: Create group
+  group:
+    name: "{{ group_name }}"
+    state: present
+
+- name: Create ansible-ctf-service-account
+  user:
+    name: "ansible-ctf-service-account"
+    groups: "{{ group_name }}"
+    append: yes
+    createhome: yes
+    shell: /bin/bash
+#    password: "{{ ansible-ctf-service-account-password }}"
+
+
+- name: Create logging-service-account 
+  user:
+    name: "logging-service-account"
+    groups: "{{ group_name }}"
+    append: yes
+    createhome: yes
+    shell: /bin/bash
+#    password: "{{ logging-service-account-password }}"
+
+#- name: Add public ssh key to ansible-ctf-service-account
+#  authorized_key:
+#    user: "{{ ansible-ctf-service-account }}"
+#    state: present
+#    key: "{{ lookup('file', 'files/ctf-service.pub') }}"
+
+#- name: Add public ssh key to logging-service-account
+#  authorized_key:
+#    user: "{{ logging-service-account }}"
+#    state: present
+#    key: "{{ lookup('file', 'files/ctf-service.pub') }}"
+
+#- name: Add public SSH key to service accounts
+#  authorized_key:
+#    user: "{{ item.key }}"
+#    state: present
+#    key: "{{ lookup('file', 'files/ctf-service.pub') }}"
+#  with_items:
+#    - { key: 'ansible-ctf-service-account' }
+#    - { key: 'logging-service-account' }
+

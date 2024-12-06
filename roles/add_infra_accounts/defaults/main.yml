@@ -1,0 +1,8 @@
+---
+# defaults file for add_infra_accounts
+
+group_name: "ctf-infra"
+ansible-ctf-service-account: "ctf-sa"
+logging-service-account: "log-sa"
+ansible-ctf-service-account-password: "$6$HBNwKSUSluaF7hez$FHju4qUVThXNjV.yA/9PCtgeiiHdWEda36TDCZe1ZpgRpa/jFUyGhw/kQNP6ywkNML5El83l3d2PPgfPIOLzg/"
+logging-service-account-password: "$6$HBNwKSUSluaF7hez$FHju4qUVThXNjV.yA/9PCtgeiiHdWEda36TDCZe1ZpgRpa/jFUyGhw/kQNP6ywkNML5El83l3d2PPgfPIOLzg/" 
