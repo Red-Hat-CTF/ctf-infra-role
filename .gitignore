@@ -1,0 +1,26 @@
+#VSCode stuff..
+.vscode/
+# Mac OS X stuff...
+.DS_Store
+# Vim swap files
+*.swp
+*.swo
+[._]*.un~
+credentials.yml
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+venv
+env
+Vagrantfile
+.vagrant
+# ansible-navigator
+ansible-navigator.log
+*-artifact*.json
+#ansible
+inventory
